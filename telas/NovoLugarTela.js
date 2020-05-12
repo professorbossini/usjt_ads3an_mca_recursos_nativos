@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Button, TextInput } from 'react-native';
-
+import { useDispatch } from 'react-redux'
+import * as lugaresActions from '../store/lugares-actions'
+import TiraFoto from '../componentes/TiraFoto';
 
 const NovoLugarTela = (props) => {
+
+    const dispatch = useDispatch();
 
     const [novoLugar, setNovoLugar] = useState('');
     const novoLugarAlterado = (texto) => {
         setNovoLugar(texto);
     }
 
-    const adicionarLugar = () => {
+    const [imagemURI, setImagemURI] = useState();
 
+    const fotoTirada = imagemURI => {
+        setImagemURI(imagemURI);
+    }
+
+    const adicionarLugar = () => {
+        dispatch(lugaresActions.addLugar(novoLugar, imagemURI));
+        props.navigation.goBack();
     }
 
     return (
@@ -21,6 +32,7 @@ const NovoLugarTela = (props) => {
                 onChangeText={novoLugarAlterado}
                 value={novoLugar}
             />
+            <TiraFoto onFotoTirada={fotoTirada} />
             <Button
                 title="Ok"
                 onPress={adicionarLugar}
